@@ -1,4 +1,4 @@
-package com.yunheur.board.board.interceptor;
+package com.yunheur.board.interceptor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.ModelAndView;
