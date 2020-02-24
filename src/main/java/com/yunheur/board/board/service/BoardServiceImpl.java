@@ -3,10 +3,14 @@ package com.yunheur.board.board.service;
 import java.util.List;
 
 import com.yunheur.board.board.dto.BoardDto;
+import com.yunheur.board.board.dto.BoardFileDto;
 import com.yunheur.board.board.mapper.BoardMapper;
+import com.yunheur.board.common.FileUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 @Service
 public class BoardServiceImpl implements BoardService{
@@ -14,19 +18,29 @@ public class BoardServiceImpl implements BoardService{
 	@Autowired
 	private BoardMapper boardMapper;
 
+	@Autowired
+	private FileUtils fileUtils;
+
 	@Override
 	public List<BoardDto> selectBoardList() throws Exception {
 		return boardMapper.selectBoardList();
 	}
 
 	@Override
-	public void insertBoard(BoardDto board) throws Exception {
+	public void insertBoard(BoardDto board, MultipartHttpServletRequest multipartHttpServletRequest) throws Exception {
 		boardMapper.insertBoard(board);
+		List<BoardFileDto> list = fileUtils.parseFileInfo(board.getBoardIdx(), multipartHttpServletRequest);
+		if(CollectionUtils.isEmpty(list) == false){
+			boardMapper.insertBoardFileList(list);
+		}
 	}
 
 	@Override
 	public BoardDto selectBoardDetail(int boardIdx) throws Exception{
 		BoardDto board = boardMapper.selectBoardDetail(boardIdx);
+		List<BoardFileDto> fileList = boardMapper.selectBoardFileList(boardIdx);
+		board.setFileList(fileList);
+
 		boardMapper.updateHitCount(boardIdx);
 
 		return board;
@@ -40,6 +54,11 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public void deleteBoard(int boardIdx) throws Exception {
 		boardMapper.deleteBoard(boardIdx);
+	}
+
+	@Override
+	public BoardFileDto selectBoardFileInformation(int idx, int boardIdx) throws Exception {
+		return boardMapper.selectBoardFileInformation(idx, boardIdx);
 	}
 }
 
