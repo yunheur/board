@@ -2,7 +2,6 @@
 <!DOCTYPE xml>
 <configuration debug="true">
     <!-- Appenders -->
-    <!-- 로그를 어디(콘솔, 파일 기록, DB 저장)에 출력할지 결정-->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <Pattern>%d %5p [%c] %m%n</Pattern>
