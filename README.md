@@ -5,6 +5,7 @@ Spring Boot 기반의 간단한 게시판
 ### Learn
 
 - Spring Boot
+- Gradle
 - Themeleaf
 - Mybatis
 - Swagger
